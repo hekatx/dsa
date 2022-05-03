@@ -1,81 +1,80 @@
 package single
 
-import (
-	"errors"
-)
+import "errors"
 
-type Node struct {
-	value interface{}
-	next  *Node
+type Node[T any] struct {
+	value T
+	Next  *Node[T]
 }
 
-type List struct {
-	next *Node
+type Head[T any] struct {
+	Next *Node[T]
 	size int
 }
 
-func New(values ...interface{}) *List {
-	list := &List{}
+func New[T any](values []T) Head[T] {
+	list := Head[T]{}
 	if values != nil {
-		list.PushFront(values...)
+		list.PushFront(values)
 	}
 	return list
 }
 
-func (l *List) PushFront(values ...interface{}) {
+func (h *Head[T]) PushFront(values []T) {
 	for _, value := range values {
-		node := &Node{value, l.next}
-		l.next = node
-		l.size++
+		node := &Node[T]{value, h.Next}
+		h.Next = node
+		h.size++
 	}
 }
 
-func (l *List) Empty() bool {
-	return l.size == 0
+func (h *Head[T]) Empty() bool {
+	return h.size == 0
 }
 
-func (l *List) ValueAt(index int) (interface{}, error) {
-	if index > l.size {
+func (h *Head[T]) Size() int {
+	return h.size
+}
+
+func (h *Head[T]) ValueAt(index int) (interface{}, error) {
+	if index > h.size {
 		return nil, errors.New("Index is out of list range")
 	}
-	currentNode := l.next
+	currentNode := h.Next
 	for i := 0; i != index; i++ {
-		currentNode = currentNode.next
+		currentNode = currentNode.Next
 	}
 	return currentNode.value, nil
 }
 
-func (l *List) PopFront() (interface{}, error) {
-	if l.Empty() {
+func (h *Head[T]) PopFront() (interface{}, error) {
+	if h.Empty() {
 		return nil, errors.New("Can't call PopFront when list is empty")
 	}
-	popped := l.next.value
-	l.next = l.next.next
+	popped := h.Next.value
+	h.Next = h.Next.Next
 	return popped, nil
 }
 
-func (l *List) PushBack(value interface{}) {
-	n := &Node{value, nil}
-	b := l.Back()
-	b.next = n
-	l.size++
+func (h *Head[T]) PushBack(value T) {
+	n := &Node[T]{value, nil}
+	b := h.Back()
+	b.Next = n
+	h.size++
 }
 
-func (l *List) Front() *Node {
-	return l.next
+func (h *Head[T]) Front() *Node[T] {
+	return h.Next
 }
 
-func (l *List) Back() *Node {
-	currentNode := l.next
-	for i := 0; i < l.size-1; i++ {
-		currentNode = currentNode.next
+func (h *Head[T]) Back() *Node[T] {
+	currentNode := h.Next
+	for i := 0; i < h.size-1; i++ {
+		currentNode = currentNode.Next
 	}
 	return currentNode
 }
 
-func (l *List) Display() {
-	currentNode := l.next
-	for i := 0; i < l.size; i++ {
-		currentNode = currentNode.next
-	}
+func (h *Head[T]) Reverse() {
+
 }
