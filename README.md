@@ -4,7 +4,7 @@ My first implementation of common DSA for learning purposes.
 
 ## Linked lists
 
-```
+```go
 // Current implementation only admits slices with values
 // so to create an empty linked list you have to call New() with an empty slice. Slices can be any type.
 l := list.New([]any{})
