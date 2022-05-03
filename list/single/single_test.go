@@ -1,99 +1,85 @@
 package single
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/hekatx/dsa/utils"
+	"github.com/stretchr/testify/assert"
+)
+
+func getMockValues() []any {
+	v := []any{}
+
+	vlen := int(utils.RandomInt(4, 10))
+
+	for i := 0; i < vlen; i++ {
+		s := utils.RandomString()
+		v = append(v, s)
+	}
+
+	return v
+}
 
 func TestEmptyList(t *testing.T) {
-	list := New()
+	list := New([]any{})
 
-	if list.next != nil {
-		t.Fatalf("List contains elements")
-	}
+	assert.Nil(t, list.Next, "List contains elements")
 
-	if !list.Empty() {
-		t.Errorf("List is not empty, contains %v", list.size)
-	}
+	assert.True(t, list.Empty(), "List is not empty, contains something")
+
 }
 
 func TestNewList(t *testing.T) {
-	list := New("First value")
+	list := New([]string{"Second list, first value"})
 
-	if list.Empty() {
-		t.Errorf("The list is empty, it contains %v nodes", list.size)
-	}
-
-	list2 := New()
-
-	list2.PushFront("Second list, first value")
-
-	got := list2.next.value
-	want := "Second list, first value"
-
-	if got != want {
-		t.Errorf("A different element was added: %s", got)
-	}
+	assert.Equal(t, list.Next.value, "Second list, first value", "A different element was added: %s")
 }
 
 func TestSequentialNodes(t *testing.T) {
-	mockValues := []interface{}{1, "Hello", 231, "World"}
-	list := New(mockValues...)
+	m := getMockValues()
+	list := New(m)
 
-	currentNode := list.next
+	currentNode := list.Next
 
-	for i := len(mockValues) - 1; i >= 0; i-- {
-		currentMockValue := mockValues[i]
-		if currentMockValue != currentNode.value {
-			t.Errorf("Expected next node to be %v but instead got %v", currentMockValue, currentNode.value)
-		}
-		currentNode = currentNode.next
+	for i := len(m) - 1; i >= 0; i-- {
+		currentMockValue := m[i]
+		assert.Equal(t, currentMockValue, currentNode.value, "Expected next node to be %v but instead got %v")
+		currentNode = currentNode.Next
 	}
 }
 
 func TestValueAt(t *testing.T) {
-	mockValues := []interface{}{1, "Hello", 231, "World"}
+	m := getMockValues()
+	list := New(m)
 
-	list := New(mockValues...)
+	v, err := list.ValueAt(2)
 
-	got, err := list.ValueAt(2)
-	want := "Hello"
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	if got != want {
-		t.Errorf("Expected list.ValueAt(2) to equal %v but instead go %v", want, got)
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, v, m[len(m)-3], "Expected %v to equal %v in %v", v, m[len(m)-3], m)
 }
 
 func TestPopFront(t *testing.T) {
-	mockValues := []interface{}{1, "Hello", 231, "World"}
+	m := getMockValues()
 
-	list := New()
+	list := New([]any{})
 	_, err := list.PopFront()
 
-	if err == nil {
-		t.Error("Calling PopFront on an empty list should have thrown an error")
-	}
+	assert.NotNil(t, err, "Calling PopFront on an empty list should have thrown an error")
 
-	list2 := New(mockValues...)
+	list2 := New(m)
 
-	got, _ := list2.PopFront()
-	want := "World"
+	v, _ := list2.PopFront()
 
-	if got != want {
-		t.Errorf("Popped the wrong element")
-	}
+	assert.Equal(t, v, m[len(m)-1], "Popped the wrong element")
 }
 
 func TestPushBack(t *testing.T) {
-	mockValues := []interface{}{1, "Hello", 231, "World"}
-	list := New(mockValues...)
+	m := getMockValues()
+	list := New(m)
 
-	want := "Last value"
+	want := m[len(m)-1]
 	list.PushBack(want)
 	got := list.Back().value
 
-	if got != want {
-		t.Errorf("Either pushed or retrieved wrong element, expected %v but received %v", want, got)
-	}
+	assert.Equal(t, got, want, "Either pushed or retrieved wrong element, expected %v but received %v", want, got)
 }
