@@ -7,19 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func getMockValues() []any {
-	v := []any{}
-
-	vlen := int(utils.RandomInt(4, 10))
-
-	for i := 0; i < vlen; i++ {
-		s := utils.RandomString()
-		v = append(v, s)
-	}
-
-	return v
-}
-
 func TestEmptyList(t *testing.T) {
 	list := New([]any{})
 
@@ -36,7 +23,7 @@ func TestNewList(t *testing.T) {
 }
 
 func TestSequentialNodes(t *testing.T) {
-	m := getMockValues()
+	m := utils.GetMockValues()
 	list := New(m)
 
 	currentNode := list.Next
@@ -49,7 +36,7 @@ func TestSequentialNodes(t *testing.T) {
 }
 
 func TestValueAt(t *testing.T) {
-	m := getMockValues()
+	m := utils.GetMockValues()
 	list := New(m)
 
 	v, err := list.ValueAt(2)
@@ -59,7 +46,7 @@ func TestValueAt(t *testing.T) {
 }
 
 func TestPopFront(t *testing.T) {
-	m := getMockValues()
+	m := utils.GetMockValues()
 
 	list := New([]any{})
 	_, err := list.PopFront()
@@ -74,7 +61,7 @@ func TestPopFront(t *testing.T) {
 }
 
 func TestPushBack(t *testing.T) {
-	m := getMockValues()
+	m := utils.GetMockValues()
 	list := New(m)
 
 	want := m[len(m)-1]
@@ -85,7 +72,7 @@ func TestPushBack(t *testing.T) {
 }
 
 func TestReverse(t *testing.T) {
-	m := getMockValues()
+	m := utils.GetMockValues()
 	list := New(m)
 
 	list.Reverse(list.Next)

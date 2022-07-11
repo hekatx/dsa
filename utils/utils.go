@@ -29,3 +29,16 @@ func RandomString() string {
 
 	return sb.String()
 }
+
+func GetMockValues() []any {
+	v := []any{}
+
+	vlen := int(RandomInt(4, 10))
+
+	for i := 0; i < vlen; i++ {
+		s := RandomString()
+		v = append(v, s)
+	}
+
+	return v
+}
