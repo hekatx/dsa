@@ -18,18 +18,21 @@ l.PushFront(v)
 
 v2 := []int{1}
 
-// Similarly, you can add elements to the end of the list with:
+// Similarly, you can add elements to the end of the list
 l.PushBack(v2)
 
 // Get a particular value by index
 l.ValueAt(2) // returns "hello"
 
 // Remove the first element of the list
-v, err = l.PopFront() // returns the "world" and an error
+v, err = l.PopFront() // returns value of the first node and an error
 
 // Get first element of the list
 l.Front() // returns "hello" since we popped "world"
 
 // Get last element of the list
 l.Back() // returns 1
+
+// Reverse the list by calling the Reverse method and passing the very first node
+l.Reverse(l.Next)
 ```
