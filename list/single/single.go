@@ -2,6 +2,12 @@ package single
 
 import "errors"
 
+var m = map[string]string{
+	"valueAt":  "Index is out of list range",
+	"popFront": "Can't call PopFront when list is empty",
+	"reverse":  "Index is out of list range",
+}
+
 type Node[T any] struct {
 	value T
 	Next  *Node[T]
@@ -38,7 +44,7 @@ func (h *Head[T]) Size() int {
 
 func (h *Head[T]) ValueAt(index int) (interface{}, error) {
 	if index > h.size {
-		return nil, errors.New("Index is out of list range")
+		return nil, errors.New(m["valueAt"])
 	}
 	currentNode := h.Next
 	for i := 0; i != index; i++ {
@@ -49,7 +55,7 @@ func (h *Head[T]) ValueAt(index int) (interface{}, error) {
 
 func (h *Head[T]) PopFront() (interface{}, error) {
 	if h.Empty() {
-		return nil, errors.New("Can't call PopFront when list is empty")
+		return nil, errors.New(m["popFront"])
 	}
 	popped := h.Next.value
 	h.Next = h.Next.Next
@@ -75,6 +81,15 @@ func (h *Head[T]) Back() *Node[T] {
 	return currentNode
 }
 
-func (h *Head[T]) Reverse() {
+func (h *Head[T]) Reverse(n *Node[T]) *Node[T] {
+	if n.Next == nil {
+		h.Next = n
+		return n
+	}
 
+	cn := h.Reverse(n.Next)
+	n.Next = nil
+	cn.Next = n
+
+	return n
 }

@@ -83,3 +83,18 @@ func TestPushBack(t *testing.T) {
 
 	assert.Equal(t, got, want, "Either pushed or retrieved wrong element, expected %v but received %v", want, got)
 }
+
+func TestReverse(t *testing.T) {
+	m := getMockValues()
+	list := New(m)
+
+	list.Reverse(list.Next)
+
+	currentNode := list.Next
+
+	for i := 0; i <= 0; i++ {
+		currentMockValue := m[i]
+		assert.Equal(t, currentMockValue, currentNode.value, "Expected next node to be %v but instead got %v")
+		currentNode = currentNode.Next
+	}
+}
