@@ -9,5 +9,10 @@ import (
 func main() {
 	list := s.New([]any{})
 	list.PushFront([]any{"hello", 1, 5, 7})
-	fmt.Println(list.Next)
+	list.Reverse(list.Next)
+	cn := list.Next
+	for i := 0; i < 4; i++ {
+		fmt.Println(cn)
+		cn = cn.Next
+	}
 }
